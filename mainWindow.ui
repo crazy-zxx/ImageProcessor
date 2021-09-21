@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>696</width>
+    <height>524</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>图像处理软件2.0</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="1" column="1">
+     <widget class="QGraphicsView" name="outImageView"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QGraphicsView" name="srcImageView"/>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="srcImageLabel">
+      <property name="text">
+       <string>原图预览</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLabel" name="outImageLabel">
+      <property name="text">
+       <string>处理后的图片预览</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>696</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="fileMenu">
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="openFileAction"/>
+    <addaction name="saveFileAction"/>
+    <addaction name="saveFileAsAction"/>
+    <addaction name="separator"/>
+    <addaction name="exitAppAction"/>
+   </widget>
+   <widget class="QMenu" name="resetImageMenu">
+    <property name="title">
+     <string>重置图片</string>
+    </property>
+    <addaction name="resetImageAction"/>
+   </widget>
+   <widget class="QMenu" name="aboutMenu">
+    <property name="title">
+     <string>关于</string>
+    </property>
+    <addaction name="aboutAction"/>
+   </widget>
+   <widget class="QMenu" name="preImageMenu">
+    <property name="title">
+     <string>图像预处理</string>
+    </property>
+    <addaction name="grayAction"/>
+    <addaction name="binaryAction"/>
+    <addaction name="reverseAction"/>
+    <addaction name="separator"/>
+    <addaction name="lightAction"/>
+    <addaction name="contrastAction"/>
+    <addaction name="sharpAction"/>
+   </widget>
+   <widget class="QMenu" name="operateImageMenu">
+    <property name="title">
+     <string>图像运算</string>
+    </property>
+    <addaction name="addAction"/>
+    <addaction name="subtractAction"/>
+    <addaction name="multiplyAction"/>
+    <addaction name="separator"/>
+    <addaction name="zoomAction"/>
+    <addaction name="rotateAction"/>
+   </widget>
+   <widget class="QMenu" name="histogramMenu">
+    <property name="title">
+     <string>直方图均衡</string>
+    </property>
+    <addaction name="histogramAction"/>
+    <addaction name="histogramEqAction"/>
+   </widget>
+   <addaction name="fileMenu"/>
+   <addaction name="resetImageMenu"/>
+   <addaction name="preImageMenu"/>
+   <addaction name="operateImageMenu"/>
+   <addaction name="histogramMenu"/>
+   <addaction name="aboutMenu"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="openFileAction">
+   <property name="text">
+    <string>打开</string>
+   </property>
+  </action>
+  <action name="saveFileAction">
+   <property name="text">
+    <string>保存</string>
+   </property>
+  </action>
+  <action name="saveFileAsAction">
+   <property name="text">
+    <string>另存为</string>
+   </property>
+  </action>
+  <action name="exitAppAction">
+   <property name="text">
+    <string>退出</string>
+   </property>
+  </action>
+  <action name="resetImageAction">
+   <property name="text">
+    <string>恢复到原始图片</string>
+   </property>
+  </action>
+  <action name="aboutAction">
+   <property name="text">
+    <string>关于作者</string>
+   </property>
+  </action>
+  <action name="actiongg_2">
+   <property name="text">
+    <string>gg</string>
+   </property>
+  </action>
+  <action name="grayAction">
+   <property name="text">
+    <string>灰度化</string>
+   </property>
+  </action>
+  <action name="binaryAction">
+   <property name="text">
+    <string>二值化</string>
+   </property>
+  </action>
+  <action name="reverseAction">
+   <property name="text">
+    <string>颜色反转</string>
+   </property>
+  </action>
+  <action name="addAction">
+   <property name="text">
+    <string>加</string>
+   </property>
+  </action>
+  <action name="subtractAction">
+   <property name="text">
+    <string>减</string>
+   </property>
+  </action>
+  <action name="multiplyAction">
+   <property name="text">
+    <string>乘</string>
+   </property>
+  </action>
+  <action name="histogramAction">
+   <property name="text">
+    <string>归一化直方图</string>
+   </property>
+  </action>
+  <action name="histogramEqAction">
+   <property name="text">
+    <string>直方图均衡化</string>
+   </property>
+  </action>
+  <action name="lightAction">
+   <property name="text">
+    <string>亮度</string>
+   </property>
+  </action>
+  <action name="contrastAction">
+   <property name="text">
+    <string>对比度</string>
+   </property>
+  </action>
+  <action name="sharpAction">
+   <property name="text">
+    <string>锐度</string>
+   </property>
+  </action>
+  <action name="zoomAction">
+   <property name="text">
+    <string>缩放</string>
+   </property>
+  </action>
+  <action name="rotateAction">
+   <property name="text">
+    <string>旋转</string>
+   </property>
+  </action>
+  <action name="actiongg">
+   <property name="text">
+    <string>gg</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
