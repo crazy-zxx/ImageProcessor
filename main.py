@@ -247,6 +247,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # 暂存本次修改
             self.__tempImageRGB = self.lightAndContrast(__img, alpha, 0)
 
+    # 修改锐度
     def changeSharp(self, val):
         # 拷贝后修改副本
         __img = self.__outImageRGB.copy()
