@@ -15,6 +15,7 @@ from propertyWindow import Ui_Form
 
 # 预处理窗口类
 class PretreatmentWindow(QWidget, Ui_Form):
+    # 信号
     signal = pyqtSignal(object)
 
     def __init__(self):
@@ -25,19 +26,24 @@ class PretreatmentWindow(QWidget, Ui_Form):
         self.slider.valueChanged.connect(self.sliderChange)
         self.submitButton.clicked.connect(self.valueConfirm)
 
+    # 数值框改变
     def spinBoxChange(self):
         value = self.spinBox.value()
         self.slider.setValue(value)
+        # 发送信号
         self.signal.emit(value)
 
+    # 滑动条改变
     def sliderChange(self):
         value = self.slider.value()
         self.spinBox.setValue(value)
 
+    # 确认按钮按下
     def valueConfirm(self):
         self.signal.emit('ok')
         self.close()
 
+    # 重写窗口关闭处理
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
         self.signal.emit('close')
 
@@ -180,6 +186,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # 设置窗口内容
             self.__pretreatmentWindow.setWindowTitle(propertyName)
             self.__pretreatmentWindow.propertyLabel.setText(propertyName)
+            # 接收信号
             # 设置主窗口接收子窗口发送的信号的处理函数
             self.__pretreatmentWindow.signal.connect(func)
             # 显示子窗口
