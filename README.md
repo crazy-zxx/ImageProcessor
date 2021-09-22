@@ -3,7 +3,7 @@
 ### 效果预览
 ![](preview.png)
 ### 环境搭建
-Python3.8 + PyQt5 + opencv-python + numpy + matplotlib
+Python3.8 + PyQt5 + opencv-python + matplotlib
 #### 安装Python
 Linux:<br>
 ```
@@ -18,6 +18,5 @@ Windows：直接拿exe安装，记得加系统环境path
 ```
 pip install PyQt5
 pip install opencv-python
-pip install numpy
 pip install matplotlib
 ```
