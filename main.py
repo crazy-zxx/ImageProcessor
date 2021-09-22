@@ -86,6 +86,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.histogramAction.triggered.connect(self.__histogram)
         self.histogramEqAction.triggered.connect(self.__histogramEqualization)
 
+        self.aboutAction.triggered.connect(self.__aboutAuthor)
+
     # 打开文件并在主窗口中显示打开的图像
     def __openFileAndShowImage(self):
         __fileName, _ = QFileDialog.getOpenFileName(self, '选择图片', '.', 'Image Files(*.png *.jpeg *.jpg *.bmp)')
@@ -410,6 +412,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 bh = cv2.equalizeHist(b)
                 self.__outImageRGB = cv2.merge((rh, gh, bh))
             self.__drawImage(self.outImageView,self.__outImageRGB)
+
+    # 关于作者
+    def __aboutAuthor(self):
+        QMessageBox.information(None,'关于作者','图像处理软件2.0\n\nCopyright © 2021–2099 赵相欣\n\n保留一切权利')
 
 
 if __name__ == '__main__':
