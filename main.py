@@ -399,6 +399,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if len(self.__outImageRGB.shape) < 3:
                 __hist = cv2.calcHist([self.__outImageRGB], [0], None, [256], [0, 256])
                 plt.plot(__hist)
+            # 如果是RGB图
             else:
                 color = {'r', 'g', 'b'}
                 # 使用 matplotlib 的绘图功能同时绘制多通道 RGB 的直方图
