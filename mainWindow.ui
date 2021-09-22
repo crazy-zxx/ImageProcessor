@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>696</width>
-    <height>524</height>
+    <width>742</width>
+    <height>523</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -48,7 +48,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>696</width>
+     <width>742</width>
      <height>24</height>
     </rect>
    </property>
@@ -91,9 +91,9 @@
     <property name="title">
      <string>图像运算</string>
     </property>
-    <addaction name="addAction"/>
-    <addaction name="subtractAction"/>
-    <addaction name="multiplyAction"/>
+    <addaction name="imageAddAction"/>
+    <addaction name="imageSubtractAction"/>
+    <addaction name="imageMultiplyAction"/>
     <addaction name="separator"/>
     <addaction name="zoomAction"/>
     <addaction name="rotateAction"/>
@@ -163,17 +163,17 @@
     <string>颜色反转</string>
    </property>
   </action>
-  <action name="addAction">
+  <action name="imageAddAction">
    <property name="text">
     <string>加</string>
    </property>
   </action>
-  <action name="subtractAction">
+  <action name="imageSubtractAction">
    <property name="text">
     <string>减</string>
    </property>
   </action>
-  <action name="multiplyAction">
+  <action name="imageMultiplyAction">
    <property name="text">
     <string>乘</string>
    </property>
