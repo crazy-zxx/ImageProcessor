@@ -359,11 +359,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     # 打开图像预处理的旋转调节子窗口
     def __openRotateWindow(self):
         self.__openPropertyWindow('旋转', self.__changeRotate)
-        # 重设属性值取值范围
-        self.__pretreatmentWindow.slider.setMaximum(360)
-        self.__pretreatmentWindow.slider.setMinimum(-360)
-        self.__pretreatmentWindow.spinBox.setMaximum(360)
-        self.__pretreatmentWindow.spinBox.setMinimum(-360)
+        if self.__fileName:
+            # 重设属性值取值范围
+            self.__pretreatmentWindow.slider.setMaximum(360)
+            self.__pretreatmentWindow.slider.setMinimum(-360)
+            self.__pretreatmentWindow.spinBox.setMaximum(360)
+            self.__pretreatmentWindow.spinBox.setMinimum(-360)
 
     # 旋转
     def __changeRotate(self, val):
