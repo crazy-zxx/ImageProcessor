@@ -75,6 +75,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.sharpAction.triggered.connect(self.openSharpWindow)
         self.saturationAction.triggered.connect(self.openSaturationWindow)
 
+        self.addAction.triggered.connect(self.addImage)
+        self.subtractAction.triggered.connect(self.subtractImage)
+        self.multiplyAction.triggered.connect(self.multiplyImage)
+        self.zoomAction.triggered.connect(self.openZoomWindow)
+        self.rotateAction.triggered.connect(self.openRotateWindow)
+
     # 打开文件并在主窗口中显示打开的图像
     def openFileAndShowImage(self):
         __fileName, _ = QFileDialog.getOpenFileName(self, '选择图片', '.', 'Image Files(*.png *.jpeg *.jpg *.bmp)')
@@ -313,13 +319,33 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.__drawImage(self.outImageView, self.__tempImageRGB)
 
     # -----------------------------------图像运算-----------------------------------
+    # 加、减、乘操作
+    def __operation(self, func):
+        if self.__fileName:
+            __fileName, _ = QFileDialog.getOpenFileName(self, '选择图片', '.', 'Image Files(*.png *.jpeg *.jpg *.bmp)')
+            if __fileName and os.path.exists(__fileName):
+                __bgrImg = cv2.imread(__fileName)
+                # 图片尺寸相同才能进行运算
+                if self.__outImageRGB.shape == __bgrImg.shape:
+                    __rgbImg = cv2.cvtColor(__bgrImg, cv2.COLOR_BGR2RGB)
+                    self.__outImageRGB = func(self.__outImageRGB, __rgbImg)
+                    self.__drawImage(self.outImageView, self.__outImageRGB)
+                else:
+                    QMessageBox.information(None, '提示', '图像尺寸不一致，无法进行操作！')
+
     # 加
+    def addImage(self):
+        self.__operation(cv2.add)
 
     # 减
+    def subtractImage(self):
+        self.__operation(cv2.subtract)
 
     # 乘
+    def multiplyImage(self):
+        self.__operation(cv2.multiply)
 
-    # 打开图像预处理的对比度调节子窗口
+    # 打开图像预处理的缩放调节子窗口
     def openZoomWindow(self):
         if self.__fileName:
             self.__pretreatmentWindow = PretreatmentWindow()
@@ -329,41 +355,91 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.__pretreatmentWindow.signal.connect(self.changeZoom)
 
     # 缩放
-    def changeZoom(self):
-        if self.__fileName:
-            status = 'zoom'
-            img = self.copyByStatus(status)
+    def changeZoom(self, val):
+        # 拷贝后修改副本
+        __img = self.__outImageRGB.copy()
+        if len(__img.shape) < 3:
+            __img = cv2.cvtColor(__img, cv2.COLOR_GRAY2RGB)
+        value = str(val)
+
+        # 确认修改
+        if value == 'ok':
+            # 将暂存的修改保存为结果
+            self.__outImageRGB = self.__tempImageRGB.copy()
+        # 修改完成（确认已经做的修改或取消了修改）
+        elif value == 'close':
+            # 重绘修改预览
+            self.__drawImage(self.outImageView, self.__outImageRGB)
+        # 暂时修改
+        else:
             # 计算比例
-            k = self.zoomBox.value() / 100
+            i = int(value)
+            if i == -100:
+                k = 0.01
+            elif i >= 0:
+                k = (i + 10) / 10
+            else:
+                k = (int(value) + 100) / 100
             # 直接cv2.resize()缩放
-            img = cv2.resize(img, None, fx=k, fy=k, interpolation=cv2.INTER_LINEAR)
+            self.__tempImageRGB = cv2.resize(__img, None, fx=k, fy=k, interpolation=cv2.INTER_LINEAR)
+            # 显示修改数据
+            self.__drawImage(self.outImageView, self.__tempImageRGB)
+
+    # 打开图像预处理的旋转调节子窗口
+    def openRotateWindow(self):
+        if self.__fileName:
+            self.__pretreatmentWindow = PretreatmentWindow()
+            self.__pretreatmentWindow.setWindowTitle('旋转')
+            self.__pretreatmentWindow.propertyLabel.setText('旋转')
+            self.__pretreatmentWindow.slider.setMaximum(360)
+            self.__pretreatmentWindow.slider.setMinimum(-360)
+            self.__pretreatmentWindow.spinBox.setMaximum(360)
+            self.__pretreatmentWindow.spinBox.setMinimum(-360)
+            self.__pretreatmentWindow.show()
+            self.__pretreatmentWindow.signal.connect(self.changeRotate)
 
     # 旋转
-    def changeRotate(self):
-        if self.__fileName:
-            __status = 'rotate'
-            img = self.copyByStatus(__status)
-            k = self.ui.rotateBox.value()
+    def changeRotate(self, val):
+        # 拷贝后修改副本
+        __img = self.__outImageRGB.copy()
+        if len(__img.shape) < 3:
+            __img = cv2.cvtColor(__img, cv2.COLOR_GRAY2RGB)
+        value = str(val)
+
+        # 确认修改
+        if value == 'ok':
+            # 将暂存的修改保存为结果
+            self.__outImageRGB = self.__tempImageRGB.copy()
+        # 修改完成（确认已经做的修改或取消了修改）
+        elif value == 'close':
+            # 重绘修改预览
+            self.__drawImage(self.outImageView, self.__outImageRGB)
+        # 暂时修改
+        else:
+            k = int(value)
+            (h, w) = __img.shape[:2]
+            (cX, cY) = (w // 2, h // 2)
+
+            # 绕图片中心旋转
+            m = cv2.getRotationMatrix2D((cX, cY), k, 1.0)
 
             # 计算调整后的图片显示大小，使得图片不会被切掉边缘
-            (h, w) = img.shape[:2]
-            (cX, cY) = (w // 2, h // 2)
-            # 旋转
-            m = cv2.getRotationMatrix2D((cX, cY), k, 1.0)
             cos = numpy.abs(m[0, 0])
             sin = numpy.abs(m[0, 1])
-            # compute the new bounding dimensions of the image
             nW = int((h * sin) + (w * cos))
             nH = int((h * cos) + (w * sin))
-            # adjust the rotation matrix to take into account translation
             m[0, 2] += (nW / 2) - cX
             m[1, 2] += (nH / 2) - cY
+
             # 变换，并设置旋转调整后产生的无效区域为白色
-            img = cv2.warpAffine(img, m, (nW, nH), borderValue=(255, 255, 255))
+            self.__tempImageRGB = __img = cv2.warpAffine(__img, m, (nW, nH), borderValue=(255, 255, 255))
+            # 显示修改数据
+            self.__drawImage(self.outImageView, self.__tempImageRGB)
 
-    # -----------------------------------直方图均衡-----------------------------------
 
-    # -----------------------------------空域滤波-----------------------------------
+# -----------------------------------直方图均衡-----------------------------------
+
+# -----------------------------------空域滤波-----------------------------------
 
 
 if __name__ == '__main__':
