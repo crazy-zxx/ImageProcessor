@@ -2,13 +2,12 @@ import os
 import sys
 
 import cv2
-import matplotlib.pyplot
 import numpy
+from matplotlib import pyplot as plt
 from PyQt5 import QtGui
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QGraphicsScene, QFileDialog, QMessageBox
-from matplotlib import pyplot as plt
 
 from mainWindow import Ui_MainWindow
 from propertyWindow import Ui_Form
@@ -411,11 +410,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 gh = cv2.equalizeHist(g)
                 bh = cv2.equalizeHist(b)
                 self.__outImageRGB = cv2.merge((rh, gh, bh))
-            self.__drawImage(self.outImageView,self.__outImageRGB)
+            self.__drawImage(self.outImageView, self.__outImageRGB)
 
     # 关于作者
     def __aboutAuthor(self):
-        QMessageBox.information(None,'关于作者','图像处理软件2.0\n\nCopyright © 2021–2099 赵相欣\n\n保留一切权利')
+        QMessageBox.information(None, '关于作者', '图像处理软件2.0\n\nCopyright © 2021–2099 赵相欣\n\n保留一切权利')
 
 
 if __name__ == '__main__':
