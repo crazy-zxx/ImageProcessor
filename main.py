@@ -395,12 +395,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     # 归一化直方图
     def __histogram(self):
         if self.__fileName:
-            color = {'r', 'g', 'b'}
-            # 使用 matplotlib 的绘图功能同时绘制多通道 RGB 的直方图
-            for i, col in enumerate(color):
-                __hist = cv2.calcHist([self.__outImageRGB], [i], None, [256], [0, 256])
-                plt.plot(__hist, color=col)
-                plt.xlim([0, 256])
+            # 如果是灰度图
+            if len(self.__outImageRGB.shape) < 3:
+                __hist = cv2.calcHist([self.__outImageRGB], [0], None, [256], [0, 256])
+                plt.plot(__hist)
+            else:
+                color = {'r', 'g', 'b'}
+                # 使用 matplotlib 的绘图功能同时绘制多通道 RGB 的直方图
+                for i, col in enumerate(color):
+                    __hist = cv2.calcHist([self.__outImageRGB], [i], None, [256], [0, 256])
+                    plt.plot(__hist, color=col)
+            # x轴长度区间
+            plt.xlim([0, 256])
+            # 显示直方图
             plt.show()
 
     # 直方图均衡化
