@@ -85,6 +85,7 @@
     <addaction name="lightAction"/>
     <addaction name="contrastAction"/>
     <addaction name="sharpAction"/>
+    <addaction name="saturationAction"/>
    </widget>
    <widget class="QMenu" name="operateImageMenu">
     <property name="title">
@@ -215,6 +216,11 @@
   <action name="actiongg">
    <property name="text">
     <string>gg</string>
+   </property>
+  </action>
+  <action name="saturationAction">
+   <property name="text">
+    <string>饱和度</string>
    </property>
   </action>
  </widget>

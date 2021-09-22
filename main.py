@@ -73,6 +73,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.lightAction.triggered.connect(self.openLightWindow)
         self.contrastAction.triggered.connect(self.openContrastWindow)
         self.sharpAction.triggered.connect(self.openSharpWindow)
+        self.saturationAction.triggered.connect(self.openSaturationWindow)
 
     # 打开文件并在主窗口中显示打开的图像
     def openFileAndShowImage(self):
@@ -139,6 +140,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.__outImageRGB = self.__srcImageRGB.copy()
             self.__drawImage(self.outImageView, self.__outImageRGB)
 
+    # -----------------------------------图像预处理-----------------------------------
     # 灰度化
     def toGrayImage(self):
         # 只有RGB图才能灰度化
@@ -188,6 +190,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.__pretreatmentWindow.propertyLabel.setText('锐度')
             self.__pretreatmentWindow.show()
             self.__pretreatmentWindow.signal.connect(self.changeSharp)
+
+    # 打开图像预处理的饱和度调节子窗口
+    def openSaturationWindow(self):
+        if self.__fileName:
+            self.__pretreatmentWindow = PretreatmentWindow()
+            self.__pretreatmentWindow.setWindowTitle('饱和度')
+            self.__pretreatmentWindow.propertyLabel.setText('饱和度')
+            self.__pretreatmentWindow.show()
+            self.__pretreatmentWindow.signal.connect(self.changeSaturation)
 
     # 改变亮度或对比度
     # g(i,j)=αf(i,j)+(1-α)black+β，α用来调节对比度, β用来调节亮度
@@ -249,8 +260,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     # 修改锐度
     def changeSharp(self, val):
+
         # 拷贝后修改副本
         __img = self.__outImageRGB.copy()
+        if len(__img.shape) < 3:
+            __img = cv2.cvtColor(__img, cv2.COLOR_GRAY2RGB)
         value = str(val)
 
         # 确认修改
@@ -270,6 +284,86 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.__tempImageRGB = cv2.filter2D(__img, -1, kernel)
             # 显示修改数据
             self.__drawImage(self.outImageView, self.__tempImageRGB)
+
+    # 修改饱和度
+    def changeSaturation(self, val):
+        # 拷贝后修改副本
+        __img = self.__outImageRGB.copy()
+        if len(__img.shape) < 3:
+            __img = cv2.cvtColor(__img, cv2.COLOR_GRAY2RGB)
+        __img = cv2.cvtColor(__img, cv2.COLOR_RGB2HLS)
+        value = str(val)
+
+        # 确认修改
+        if value == 'ok':
+            # 将暂存的修改保存为结果
+            self.__outImageRGB = self.__tempImageRGB.copy()
+        # 修改完成（确认已经做的修改或取消了修改）
+        elif value == 'close':
+            # 重绘修改预览
+            self.__drawImage(self.outImageView, self.__outImageRGB)
+        # 暂时修改
+        else:
+            # 比例
+            k = int(value) * (255 / 100)
+            # 切片修改S分量，并限制色彩数值在0-255之间
+            __img[:, :, 2] = numpy.clip(__img[:, :, 2] + k, 0, 255)
+            self.__tempImageRGB = cv2.cvtColor(__img, cv2.COLOR_HLS2RGB)
+            # 显示修改数据
+            self.__drawImage(self.outImageView, self.__tempImageRGB)
+
+    # -----------------------------------图像运算-----------------------------------
+    # 加
+
+    # 减
+
+    # 乘
+
+    # 打开图像预处理的对比度调节子窗口
+    def openZoomWindow(self):
+        if self.__fileName:
+            self.__pretreatmentWindow = PretreatmentWindow()
+            self.__pretreatmentWindow.setWindowTitle('缩放')
+            self.__pretreatmentWindow.propertyLabel.setText('缩放')
+            self.__pretreatmentWindow.show()
+            self.__pretreatmentWindow.signal.connect(self.changeZoom)
+
+    # 缩放
+    def changeZoom(self):
+        if self.__fileName:
+            status = 'zoom'
+            img = self.copyByStatus(status)
+            # 计算比例
+            k = self.zoomBox.value() / 100
+            # 直接cv2.resize()缩放
+            img = cv2.resize(img, None, fx=k, fy=k, interpolation=cv2.INTER_LINEAR)
+
+    # 旋转
+    def changeRotate(self):
+        if self.__fileName:
+            __status = 'rotate'
+            img = self.copyByStatus(__status)
+            k = self.ui.rotateBox.value()
+
+            # 计算调整后的图片显示大小，使得图片不会被切掉边缘
+            (h, w) = img.shape[:2]
+            (cX, cY) = (w // 2, h // 2)
+            # 旋转
+            m = cv2.getRotationMatrix2D((cX, cY), k, 1.0)
+            cos = numpy.abs(m[0, 0])
+            sin = numpy.abs(m[0, 1])
+            # compute the new bounding dimensions of the image
+            nW = int((h * sin) + (w * cos))
+            nH = int((h * cos) + (w * sin))
+            # adjust the rotation matrix to take into account translation
+            m[0, 2] += (nW / 2) - cX
+            m[1, 2] += (nH / 2) - cY
+            # 变换，并设置旋转调整后产生的无效区域为白色
+            img = cv2.warpAffine(img, m, (nW, nH), borderValue=(255, 255, 255))
+
+    # -----------------------------------直方图均衡-----------------------------------
+
+    # -----------------------------------空域滤波-----------------------------------
 
 
 if __name__ == '__main__':
