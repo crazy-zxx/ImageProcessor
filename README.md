@@ -1,7 +1,8 @@
 # ImageProcessor
 基于PyQt+OpenCV的图像处理软件
 ### 效果预览
-![](preview.png)
+![](preview-windows.png)
+![](preview-mac.png)
 ### 环境搭建
 Python3.8 + PyQt5 + opencv-python + matplotlib
 #### 安装Python
