@@ -154,7 +154,6 @@ class Ui_MainWindow(object):
         self.grayMappingMenu.addAction(self.sharpAction)
         self.grayMappingMenu.addAction(self.saturationAction)
         self.grayMappingMenu.addAction(self.hueAction)
-        self.grayMappingMenu.addAction(self.reColorAction)
         self.operateImageMenu.addAction(self.imageAddAction)
         self.operateImageMenu.addAction(self.imageSubtractAction)
         self.operateImageMenu.addAction(self.imageMultiplyAction)

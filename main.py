@@ -123,8 +123,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.saturationAction.triggered.connect(self.__openSaturationWindow)
         # 色度调整
         self.hueAction.triggered.connect(self.__openHueWindow)
-        # 重新着色
-        self.reColorAction.triggered.connect(self.__reColor)
 
         # 图像运算菜单
         # 加
@@ -430,11 +428,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.__tempImageRGB = cv2.cvtColor(__img, cv2.COLOR_HLS2RGB)
             # 显示修改数据
             self.__drawImage(self.outImageView, self.__tempImageRGB)
-
-    # 重新着色
-    def __reColor(self):
-
-        pass
 
     # -----------------------------------图像运算-----------------------------------
     # 加、减、乘操作

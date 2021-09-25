@@ -107,7 +107,6 @@
     <addaction name="sharpAction"/>
     <addaction name="saturationAction"/>
     <addaction name="hueAction"/>
-    <addaction name="reColorAction"/>
    </widget>
    <widget class="QMenu" name="operateImageMenu">
     <property name="title">
