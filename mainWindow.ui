@@ -16,10 +16,30 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="1" column="1">
-     <widget class="QGraphicsView" name="outImageView"/>
+     <widget class="QGraphicsView" name="outImageView">
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOn</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOn</enum>
+      </property>
+     </widget>
     </item>
     <item row="1" column="0">
-     <widget class="QGraphicsView" name="srcImageView"/>
+     <widget class="QGraphicsView" name="srcImageView">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOn</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOn</enum>
+      </property>
+     </widget>
     </item>
     <item row="0" column="0">
      <widget class="QLabel" name="srcImageLabel">
@@ -74,9 +94,9 @@
     </property>
     <addaction name="aboutAction"/>
    </widget>
-   <widget class="QMenu" name="preImageMenu">
+   <widget class="QMenu" name="grayMappingMenu">
     <property name="title">
-     <string>图像预处理</string>
+     <string>直接灰度映射</string>
     </property>
     <addaction name="grayAction"/>
     <addaction name="binaryAction"/>
@@ -86,6 +106,8 @@
     <addaction name="contrastAction"/>
     <addaction name="sharpAction"/>
     <addaction name="saturationAction"/>
+    <addaction name="hueAction"/>
+    <addaction name="reColorAction"/>
    </widget>
    <widget class="QMenu" name="operateImageMenu">
     <property name="title">
@@ -105,11 +127,43 @@
     <addaction name="histogramAction"/>
     <addaction name="histogramEqAction"/>
    </widget>
+   <widget class="QMenu" name="noiseMenu">
+    <property name="title">
+     <string>噪声</string>
+    </property>
+    <addaction name="addGaussianNoiseAction"/>
+    <addaction name="addUiformNoiseAction"/>
+    <addaction name="addImpulseNoiseAction"/>
+   </widget>
+   <widget class="QMenu" name="filterMenu">
+    <property name="title">
+     <string>空域滤波</string>
+    </property>
+    <widget class="QMenu" name="smoothMenu">
+     <property name="title">
+      <string>平滑滤波器</string>
+     </property>
+     <addaction name="meanValueAction"/>
+     <addaction name="medianValueAction"/>
+    </widget>
+    <widget class="QMenu" name="sharpMenu">
+     <property name="title">
+      <string>锐化滤波器</string>
+     </property>
+     <addaction name="sobelAction"/>
+     <addaction name="prewittAction"/>
+     <addaction name="laplacianAction"/>
+    </widget>
+    <addaction name="smoothMenu"/>
+    <addaction name="sharpMenu"/>
+   </widget>
    <addaction name="fileMenu"/>
    <addaction name="resetImageMenu"/>
-   <addaction name="preImageMenu"/>
+   <addaction name="grayMappingMenu"/>
    <addaction name="operateImageMenu"/>
    <addaction name="histogramMenu"/>
+   <addaction name="noiseMenu"/>
+   <addaction name="filterMenu"/>
    <addaction name="aboutMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -221,6 +275,66 @@
   <action name="saturationAction">
    <property name="text">
     <string>饱和度</string>
+   </property>
+  </action>
+  <action name="hueAction">
+   <property name="text">
+    <string>色调</string>
+   </property>
+  </action>
+  <action name="reColorAction">
+   <property name="text">
+    <string>重新着色</string>
+   </property>
+  </action>
+  <action name="addGaussianNoiseAction">
+   <property name="text">
+    <string>加高斯噪声</string>
+   </property>
+  </action>
+  <action name="actiongg_3">
+   <property name="text">
+    <string>gg</string>
+   </property>
+  </action>
+  <action name="actiongg_4">
+   <property name="text">
+    <string>gg</string>
+   </property>
+  </action>
+  <action name="meanValueAction">
+   <property name="text">
+    <string>均值滤波器</string>
+   </property>
+  </action>
+  <action name="medianValueAction">
+   <property name="text">
+    <string>中值滤波器</string>
+   </property>
+  </action>
+  <action name="sobelAction">
+   <property name="text">
+    <string>Sobel算子</string>
+   </property>
+  </action>
+  <action name="prewittAction">
+   <property name="text">
+    <string>Prewitt算子</string>
+   </property>
+  </action>
+  <action name="laplacianAction">
+   <property name="text">
+    <string>拉普拉斯算子</string>
+   </property>
+  </action>
+  <action name="addUiformNoiseAction">
+   <property name="text">
+    <string>加均匀噪声</string>
+   </property>
+  </action>
+  <action name="addImpulseNoiseAction">
+   <property name="text">
+    <string>加脉冲噪声</string>
    </property>
   </action>
  </widget>
