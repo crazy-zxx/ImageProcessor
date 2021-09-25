@@ -186,7 +186,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "图像处理软件2.0"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "图像处理软件"))
         self.srcImageLabel.setText(_translate("MainWindow", "原图预览"))
         self.outImageLabel.setText(_translate("MainWindow", "处理后的图片预览"))
         self.fileMenu.setTitle(_translate("MainWindow", "文件"))
