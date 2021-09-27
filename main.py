@@ -16,7 +16,6 @@ from propertyWindow import Ui_Form
 # 预处理窗口类
 # 就是弹出来的调整各种属性值的小窗口
 class PropertyWindow(QWidget, Ui_Form):
-
     # 信号只能在Object的子类中创建，并且只能在创建类的时候的时候添加，而不能等类已经定义完再作为动态属性添加进去。
     # 自定义的信号在__init__()函数之前定义。
     # 自定义一个信号signal，有一个object类型的参数
@@ -521,14 +520,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.__fileName:
             # 如果是灰度图
             if len(self.__outImageRGB.shape) < 3:
-                __hist = cv2.calcHist([self.__outImageRGB], [0], None, [256], [0, 256])
-                plt.plot(__hist)
+                # __hist = cv2.calcHist([self.__outImageRGB], [0], None, [256], [0, 256])
+                # __hist /= self.__outImageRGB.shape[0] * self.__outImageRGB.shape[1]
+                # plt.plot(__hist)
+                # 使用 matplotlib 的绘图功能同时绘制单通道的直方图
+                # density的类型是 bool型，指定为True,则为频率直方图，反之为频数直方图
+                plt.hist(self.__outImageRGB.ravel(), bins=255, rwidth=0.8, range=(0, 256), density=True)
             # 如果是RGB图
             else:
                 color = {'r', 'g', 'b'}
                 # 使用 matplotlib 的绘图功能同时绘制多通道 RGB 的直方图
                 for i, col in enumerate(color):
                     __hist = cv2.calcHist([self.__outImageRGB], [i], None, [256], [0, 256])
+                    __hist /= self.__outImageRGB.shape[0] * self.__outImageRGB.shape[1]
                     plt.plot(__hist, color=col)
             # x轴长度区间
             plt.xlim([0, 256])
