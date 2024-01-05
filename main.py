@@ -4,6 +4,7 @@ import sys
 
 import cv2
 import numpy
+import numpy as np
 from PyQt5 import QtGui, QtCore
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QGraphicsScene, QFileDialog, QMessageBox
@@ -175,7 +176,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # 设置打开的文件名属性
             self.__fileName = __fileName
             # 转换颜色空间，cv2默认打开BGR空间，Qt界面显示需要RGB空间，所以就统一到RGB吧
-            __bgrImg = cv2.imread(self.__fileName)
+            # __bgrImg = cv2.imread(self.__fileName)
+            # cv2 读取不了有中文名的图像文件 ！
+            # 所以用numpy读取数据，再用cv2.imdecode解码数据来解决。
+            __bgrImg = cv2.imdecode(np.fromfile(self.__fileName, dtype=np.uint8), -1)
             # 设置初始化数据
             self.__srcImageRGB = cv2.cvtColor(__bgrImg, cv2.COLOR_BGR2RGB)
             self.__outImageRGB = self.__srcImageRGB.copy()
@@ -232,7 +236,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # 已经打开了文件才能保存
         if self.__fileName:
             # 打开文件保存的选择窗口
-            __fileName, _ = QFileDialog.getSaveFileName(self, '保存图片', 'Image', 'Image Files(*.png *.jpeg *.jpg *.bmp)')
+            __fileName, _ = QFileDialog.getSaveFileName(self, '保存图片', 'Image',
+                                                        'Image Files(*.png *.jpeg *.jpg *.bmp)')
             self.__saveImg(__fileName)
         else:
             # 消息提示窗口
@@ -434,7 +439,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.__fileName:
             __fileName, _ = QFileDialog.getOpenFileName(self, '选择图片', '.', 'Image Files(*.png *.jpeg *.jpg *.bmp)')
             if __fileName and os.path.exists(__fileName):
-                __bgrImg = cv2.imread(__fileName)
+                # __bgrImg = cv2.imread(__fileName)
+                __bgrImg = cv2.imdecode(np.fromfile(__fileName, dtype=np.uint8), -1)
                 # 图片尺寸相同才能进行运算
                 if self.__outImageRGB.shape == __bgrImg.shape:
                     __rgbImg = cv2.cvtColor(__bgrImg, cv2.COLOR_BGR2RGB)
